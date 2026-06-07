@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organisation des Journées</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --surface: #ffffff;
+    --surface2: #f0ece4;
+    --border: #e0d8cc;
+    --text: #1a1714;
+    --muted: #8a8279;
+    --ink: #2c2420;
+
+    --teal: #2a6b65;
+    --teal-light: #e8f4f2;
+    --amber: #c47d2a;
+    --amber-light: #fdf3e3;
+    --slate: #3a4f6a;
+    --slate-light: #edf1f7;
+    --rose: #8a3a4a;
+    --rose-light: #fdf0f2;
+
+    --tele: #2a6b65;
+    --bureau: #3a4f6a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 28px 80px;
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 52px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 7vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--teal);
+  }
+
+  .header-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.8;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 40px 0;
+  }
+
+  /* SEMAINE VUE D'ENSEMBLE */
+  .week-overview {
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .day-card {
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    border: 1.5px solid var(--border);
+  }
+
+  .day-card.tele {
+    background: var(--teal-light);
+    border-color: rgba(42,107,101,0.2);
+  }
+
+  .day-card.bureau {
+    background: var(--slate-light);
+    border-color: rgba(58,79,106,0.2);
+  }
+
+  .day-name {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .day-card.tele .day-name { color: var(--teal); }
+  .day-card.bureau .day-name { color: var(--slate); }
+
+  .day-type {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .day-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-tele { background: rgba(42,107,101,0.12); color: var(--teal); }
+  .badge-bureau { background: rgba(58,79,106,0.12); color: var(--slate); }
+
+  /* JOURNÉE TYPE */
+  .journee-section {
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .journee-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .journee-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* BLOCS */
+  .blocs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bloc {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .bloc:hover {
+    transform: translateX(3px);
+    box-shadow: -3px 0 0 var(--teal);
+  }
+
+  .bloc.coupure:hover { box-shadow: -3px 0 0 var(--amber); }
+  .bloc.perso:hover { box-shadow: -3px 0 0 var(--rose); }
+  .bloc.famille:hover { box-shadow: -3px 0 0 var(--slate); }
+
+  .bloc-time {
+    background: var(--surface2);
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+
+  .time-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .time-dur {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .bloc-content {
+    background: var(--surface);
+    padding: 14px 18px;
+  }
+
+  .bloc-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .bloc-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .bloc-desc strong { color: var(--text); font-weight: 500; }
+
+  .bloc.coupure .bloc-content { background: var(--amber-light); }
+  .bloc.coupure .bloc-name { color: var(--amber); }
+
+  .bloc.perso .bloc-content { background: var(--rose-light); }
+  .bloc.perso .bloc-name { color: var(--rose); }
+
+  .bloc.famille .bloc-content { background: var(--slate-light); }
+  .bloc.famille .bloc-name { color: var(--slate); }
+
+  /* MENU COUPURE */
+  .menu-section {
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .menu-intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .menu-intro strong { color: var(--ink); font-weight: 500; }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .menu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .menu-card:hover { border-color: var(--muted); }
+
+  .menu-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .menu-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  .mc-maison .menu-icon { background: var(--teal-light); }
+  .mc-admin .menu-icon { background: var(--amber-light); }
+  .mc-famille .menu-icon { background: var(--slate-light); }
+  .mc-moi .menu-icon { background: var(--rose-light); }
+
+  .menu-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .mc-maison .menu-card-title { color: var(--teal); }
+  .mc-admin .menu-card-title { color: var(--amber); }
+  .mc-famille .menu-card-title { color: var(--slate); }
+  .mc-moi .menu-card-title { color: var(--rose); }
+
+  .menu-duration {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .menu-examples {
+    list-style: none;
+  }
+
+  .menu-examples li {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .menu-examples li:last-child { border-bottom: none; }
+
+  .menu-examples li::before {
+    content: '→';
+    font-size: 10px;
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  /* RITUEL VEILLE */
+  .rituel-section {
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+
+  .rituel-card {
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 28px 32px;
+    color: var(--bg);
+  }
+
+  .rituel-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #f7f4ef;
+    margin-bottom: 4px;
+  }
+
+  .rituel-sub {
+    font-size: 12px;
+    color: rgba(247,244,239,0.4);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .rituel-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rituel-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .step-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(247,244,239,0.1);
+    border: 1px solid rgba(247,244,239,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(247,244,239,0.6);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-text {
+    font-size: 13px;
+    color: rgba(247,244,239,0.7);
+    line-height: 1.6;
+  }
+
+  .step-text strong { color: #f7f4ef; font-weight: 500; }
+
+  /* WEEK-END */
+  .weekend-section {
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s 0.45s ease both;
+  }
+
+  .weekend-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .weekend-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .wc-day {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .wc-focus {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .wc-items {
+    list-style: none;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .wc-items li {
+    padding: 3px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .wc-items li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--border);
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  /* RÈGLES D'OR */
+  .regles {
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s 0.5s ease both;
+  }
+
+  .regle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .regle-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+
+  .regle-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--border);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 24px;
+  }
+
+  .regle-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    padding-top: 4px;
+  }
+
+  .regle-text strong { color: var(--ink); font-weight: 500; }
+
+  /* BOTTOM */
+  .bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.7s 0.55s ease both;
+  }
+
+  .bottom-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 3vw, 24px);
+    font-style: italic;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 12px;
+    line-height: 1.5;
+  }
+
+  .bottom-sub {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--border);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 560px) {
+    .days-grid { grid-template-columns: repeat(3, 1fr); }
+    .menu-grid { grid-template-columns: 1fr; }
+    .weekend-grid { grid-template-columns: 1fr; }
+    .bloc { grid-template-columns: 70px 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="eyebrow">Système d'organisation — Benjamin</div>
+    <h1>Contrôler<br><em>ses journées</em></h1>
+    <p class="header-desc">Un système simple pour ne plus tourner en rond : des blocs clairs, un menu de décision rapide, et un rituel de préparation la veille.</p>
+  </div>
+
+  <!-- SEMAINE -->
+  <div class="week-overview">
+    <div class="section-label">La semaine en un coup d'œil</div>
+    <div class="days-grid">
+      <div class="day-card tele">
+        <div class="day-name">Lundi</div>
+        <div class="day-type">Coupures exploitables</div>
+        <div class="day-badge badge-tele">Télétravail</div>
+      </div>
+      <div class="day-card bureau">
+        <div class="day-name">Mardi</div>
+        <div class="day-type">Rythme bureau</div>
+        <div class="day-badge badge-bureau">Bureau</div>
+      </div>
+      <div class="day-card tele">
+        <div class="day-name">Mercredi</div>
+        <div class="day-type">Coupures exploitables</div>
+        <div class="day-badge badge-tele">Télétravail</div>
+      </div>
+      <div class="day-card tele">
+        <div class="day-name">Jeudi</div>
+        <div class="day-type">Coupures exploitables</div>
+        <div class="day-badge badge-tele">Télétravail</div>
+      </div>
+      <div class="day-card bureau">
+        <div class="day-name">Vendredi</div>
+        <div class="day-type">Rythme bureau</div>
+        <div class="day-badge badge-bureau">Bureau</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- JOURNÉE TÉLÉTRAVAIL -->
+  <div class="journee-section">
+    <div class="journee-title">Journée Télétravail</div>
+    <div class="journee-sub">Lundi · Mercredi · Jeudi — structure cible</div>
+    <div class="blocs">
+
+      <div class="bloc perso">
+        <div class="bloc-time">
+          <div class="time-val">Avant<br>6h30</div>
+          <div class="time-dur">~20 min</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Rituel matin 🍵</div>
+          <div class="bloc-desc">Eau · thé · étirements · intention. <strong>Ton créneau sacré avant que le monde te réclame.</strong></div>
+        </div>
+      </div>
+
+      <div class="bloc">
+        <div class="bloc-time">
+          <div class="time-val">6h30<br>9h00</div>
+          <div class="time-dur">2h30</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Enfants + départ école</div>
+          <div class="bloc-desc">Réveil des enfants, petit-déjeuner, école. <strong>Mode famille</strong> — pas de travail, pas de tâches.</div>
+        </div>
+      </div>
+
+      <div class="bloc">
+        <div class="bloc-time">
+          <div class="time-val">9h00<br>12h00</div>
+          <div class="time-dur">3h</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Bloc travail — concentration</div>
+          <div class="bloc-desc"><strong>Le meilleur créneau cognitif de la journée.</strong> Traiter les sujets importants en premier. Si réunion, elle prend ce slot.</div>
+        </div>
+      </div>
+
+      <div class="bloc coupure">
+        <div class="bloc-time">
+          <div class="time-val">12h00<br>13h00</div>
+          <div class="time-dur">1h ✦</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Coupure déjeuner — Menu</div>
+          <div class="bloc-desc"><strong>Manger quelque chose de vrai.</strong> Puis 20–30 min sur le Menu de Coupure. Marche optionnelle si le temps le permet.</div>
+        </div>
+      </div>
+
+      <div class="bloc">
+        <div class="bloc-time">
+          <div class="time-val">13h00<br>15h30</div>
+          <div class="time-dur">2h30</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Bloc travail — réunions / tâches</div>
+          <div class="bloc-desc">Réunions, mails, sujets courants. <strong>Si une coupure apparaît ici → Menu de Coupure immédiatement.</strong></div>
+        </div>
+      </div>
+
+      <div class="bloc coupure">
+        <div class="bloc-time">
+          <div class="time-val">15h30<br>16h00</div>
+          <div class="time-dur">30 min ✦</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Coupure milieu d'après-midi</div>
+          <div class="bloc-desc">Pause <strong>non-négociable</strong>. Menu de Coupure ou simple déconnexion. Évite le coup de barre de 17h.</div>
+        </div>
+      </div>
+
+      <div class="bloc">
+        <div class="bloc-time">
+          <div class="time-val">16h00<br>17h30</div>
+          <div class="time-dur">1h30</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Clôture travail</div>
+          <div class="bloc-desc">Finir les sujets ouverts. À <strong>17h30 maxi</strong> : fermer l'ordi, couper les notifications pro.</div>
+        </div>
+      </div>
+
+      <div class="bloc famille">
+        <div class="bloc-time">
+          <div class="time-val">17h30<br>20h00</div>
+          <div class="time-dur">2h30</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Mode famille 👨‍👧‍👦</div>
+          <div class="bloc-desc">Retour école, goûter, bain, dîner, coucher enfants. <strong>Présence complète.</strong> Pas de téléphone pro.</div>
+        </div>
+      </div>
+
+      <div class="bloc perso">
+        <div class="bloc-time">
+          <div class="time-val">20h00<br>21h00</div>
+          <div class="time-dur">1h</div>
+        </div>
+        <div class="bloc-content">
+          <div class="bloc-name">Temps couple / décompression</div>
+          <div class="bloc-desc">Avec ta femme ou pour toi. <strong>Préparer le Menu de demain en 5 min.</strong> Puis rituel soir à 21h.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MENU COUPURE -->
+  <div class="menu-section">
+    <div class="section-label">Le Menu de Coupure</div>
+    <div class="menu-intro">
+      <strong>Le principe :</strong> quand une coupure apparaît, ton cerveau n'a pas à choisir parmi 50 choses. Tu ouvres ton menu — préparé la veille en 5 min — et tu <strong>pioches selon le temps disponible</strong>. Zéro friction, impact immédiat.
+    </div>
+    <div class="menu-grid">
+      <div class="menu-card mc-maison">
+        <div class="menu-card-header">
+          <div class="menu-icon">🏠</div>
+          <div>
+            <div class="menu-card-title">Maison</div>
+            <div class="menu-duration">15–30 min</div>
+          </div>
+        </div>
+        <ul class="menu-examples">
+          <li>Lancer / plier une machine</li>
+          <li>Passer l'aspirateur dans une pièce</li>
+          <li>Ranger un tiroir ou placard</li>
+          <li>Préparer le repas du soir</li>
+          <li>Sortir les poubelles</li>
+        </ul>
+      </div>
+      <div class="menu-card mc-admin">
+        <div class="menu-card-header">
+          <div class="menu-icon">📋</div>
+          <div>
+            <div class="menu-card-title">Admin / Logistique</div>
+            <div class="menu-duration">15–45 min</div>
+          </div>
+        </div>
+        <ul class="menu-examples">
+          <li>Commander les courses en ligne</li>
+          <li>Un mail ou démarche qui traîne</li>
+          <li>Planifier un rendez-vous médical</li>
+          <li>Gérer une facture / assurance</li>
+          <li>Organiser un trajet / sortie</li>
+        </ul>
+      </div>
+      <div class="menu-card mc-famille">
+        <div class="menu-card-header">
+          <div class="menu-icon">👨‍👧‍👦</div>
+          <div>
+            <div class="menu-card-title">Famille</div>
+            <div class="menu-duration">30–60 min</div>
+          </div>
+        </div>
+        <ul class="menu-examples">
+          <li>Préparer une activité pour le week-end</li>
+          <li>Commander un cadeau / surprise</li>
+          <li>Planifier les vacances scolaires</li>
+          <li>Préparer quelque chose pour ta femme</li>
+          <li>Appeler un proche</li>
+        </ul>
+      </div>
+      <div class="menu-card mc-moi">
+        <div class="menu-card-header">
+          <div class="menu-icon">⚡</div>
+          <div>
+            <div class="menu-card-title">Moi</div>
+            <div class="menu-duration">20–60 min</div>
+          </div>
+        </div>
+        <ul class="menu-examples">
+          <li>Marche de 20 min sans téléphone</li>
+          <li>Projet perso (code, création...)</li>
+          <li>Lire quelque chose qui m'intéresse</li>
+          <li>Ne rien faire intentionnellement</li>
+          <li>Sieste courte (20 min max)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RITUEL VEILLE -->
+  <div class="rituel-section">
+    <div class="rituel-card">
+      <div class="rituel-title">Le Rituel de Préparation — 5 min la veille</div>
+      <div class="rituel-sub">À faire pendant ton moment de silence (21h30) · Le moteur de tout le système</div>
+      <div class="rituel-steps">
+        <div class="rituel-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Regarde ton agenda du lendemain.</strong> Repère les coupures probables et leur durée estimée.</div>
+        </div>
+        <div class="rituel-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Note 1 tâche par catégorie</strong> (Maison / Admin / Famille / Moi) sur ton téléphone ou papier. Pas une liste exhaustive — juste 4 lignes.</div>
+        </div>
+        <div class="rituel-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Identifie ta priorité du lendemain</strong> au travail. Une seule phrase : "Demain, l'essentiel c'est..."</div>
+        </div>
+        <div class="rituel-step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Ferme le notebook.</strong> La journée est préparée. Ton cerveau peut lâcher prise — tout est posé quelque part.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK-END -->
+  <div class="weekend-section">
+    <div class="section-label">Le week-end — même logique, rythme allégé</div>
+    <div class="weekend-grid">
+      <div class="weekend-card">
+        <div class="wc-day">Samedi</div>
+        <div class="wc-focus">Famille & Maison</div>
+        <ul class="wc-items">
+          <li>Rituel matin identique</li>
+          <li>1 tâche maison concrète le matin</li>
+          <li>Après-midi avec les enfants / sortie</li>
+          <li>Pas de télétravail, pas de culpabilité</li>
+        </ul>
+      </div>
+      <div class="weekend-card">
+        <div class="wc-day">Dimanche</div>
+        <div class="wc-focus">Récupération & Recharge</div>
+        <ul class="wc-items">
+          <li>Rituel matin identique</li>
+          <li>Moment pour toi en priorité</li>
+          <li>Préparer la semaine (5 min)</li>
+          <li>Coucher identique : 21h45</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- RÈGLES D'OR -->
+  <div class="regles">
+    <div class="section-label">Les règles d'or</div>
+    <div class="regle-list">
+      <div class="regle-item">
+        <div class="regle-num">1</div>
+        <div class="regle-text"><strong>Une coupure libre = Menu de Coupure.</strong> Pas de scrolling, pas de "je verrai plus tard". Tu ouvres le menu et tu choisis en 30 secondes.</div>
+      </div>
+      <div class="regle-item">
+        <div class="regle-num">2</div>
+        <div class="regle-text"><strong>17h30 = fermeture pro.</strong> Le travail ne déborde pas sur la famille. Si ce n'est pas fini, il existe demain.</div>
+      </div>
+      <div class="regle-item">
+        <div class="regle-num">3</div>
+        <div class="regle-text"><strong>Pas de perfection.</strong> Si une journée déraille, on reprend le lendemain sans culpabilité. Le système tient sur la semaine, pas sur chaque heure.</div>
+      </div>
+      <div class="regle-item">
+        <div class="regle-num">4</div>
+        <div class="regle-text"><strong>Le rituel soir est non-négociable.</strong> Tout le reste peut s'adapter — pas lui. C'est le socle de tout.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="bottom">
+    <div class="bottom-quote">"Ce n'est pas du temps libre que tu cherches.<br>C'est du temps qui compte."</div>
+    <div class="bottom-sub">Système Phase 1 · À combiner avec la Routine Soir/Matin</div>
+  </div>
+
+</div>
+</body>
+</html>

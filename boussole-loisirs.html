@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boussole Loisirs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ef; --surface: #ffffff; --border: #e0d8cc;
+    --text: #1a1714; --muted: #8a8279; --ink: #2c2420;
+    --teal: #2a6b65; --teal-bg: #e8f4f2;
+    --amber: #c47d2a; --amber-bg: #fdf3e3;
+    --slate: #3a4f6a; --slate-bg: #edf1f7;
+    --rose: #8a3a4a; --rose-bg: #fdf0f2;
+    --green: #3a6b40; --green-bg: #edf7ee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.7; min-height: 100vh; }
+  .page { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(38px, 8vw, 60px); font-weight: 700; line-height: 1.05; color: var(--ink); margin-bottom: 12px; }
+  h1 em { font-style: italic; color: var(--teal); }
+  .header-desc { font-size: 14px; color: var(--muted); max-width: 440px; line-height: 1.8; margin-bottom: 40px; }
+
+  .filter-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .filter-group { margin-bottom: 20px; }
+  .filter-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 8px 18px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 400; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-btn.active { background: var(--ink); border-color: var(--ink); color: var(--bg); font-weight: 500; }
+  .reset-btn { background: none; border: 1px solid var(--border); border-radius: 24px; padding: 6px 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: var(--muted); cursor: pointer; }
+  .filter-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+
+  .result-zone { margin-top: 8px; min-height: 80px; }
+  .result-empty { background: var(--surface); border: 1px dashed var(--border); border-radius: 14px; padding: 32px; text-align: center; font-size: 14px; color: var(--muted); line-height: 1.8; }
+  .result-title { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+  .loisir-cards { display: flex; flex-direction: column; gap: 10px; }
+  .loisir-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: start; border-left-width: 3px; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+  .loisir-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .loisir-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+  .loisir-name { font-size: 16px; font-weight: 500; }
+  .loisir-tag { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: var(--slate-bg); color: var(--slate); }
+  .loisir-why { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .loisir-why strong { color: var(--text); font-weight: 500; }
+
+  .card-comics { border-left-color: var(--teal); } .card-comics .loisir-icon { background: var(--teal-bg); } .card-comics .loisir-name { color: var(--teal); }
+  .card-manga { border-left-color: var(--amber); } .card-manga .loisir-icon { background: var(--amber-bg); } .card-manga .loisir-name { color: var(--amber); }
+  .card-anime { border-left-color: var(--slate); } .card-anime .loisir-icon { background: var(--slate-bg); } .card-anime .loisir-name { color: var(--slate); }
+  .card-jv { border-left-color: var(--rose); } .card-jv .loisir-icon { background: var(--rose-bg); } .card-jv .loisir-name { color: var(--rose); }
+  .card-enquete { border-left-color: var(--green); } .card-enquete .loisir-icon { background: var(--green-bg); } .card-enquete .loisir-name { color: var(--green); }
+
+  .divider { height: 1px; background: var(--border); margin: 36px 0; }
+
+  .legende-title { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .legende-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+  .legende-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 12px; }
+  .legende-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: middle; }
+  .legende-name { font-weight: 500; color: var(--ink); }
+  .legende-sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
+
+  .regle-or { margin-top: 40px; background: var(--ink); border-radius: 14px; padding: 24px 28px; }
+  .regle-or-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--bg); margin-bottom: 8px; }
+  .regle-or-text { font-size: 13px; color: rgba(247,244,239,0.6); line-height: 1.8; }
+  .regle-or-text strong { color: var(--bg); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="eyebrow">Benjamin · Loisirs solo</div>
+  <h1>Ma <em>Boussole</em><br>Loisirs</h1>
+  <p class="header-desc">Choisis ton énergie et ton temps disponible — la boussole te dit quoi faire. Zéro réflexion, impact immédiat.</p>
+
+  <div class="filter-group">
+    <div class="filter-label">Énergie disponible</div>
+    <div class="filter-buttons" id="energy-group">
+      <button class="filter-btn" data-group="energy" data-val="vide">😶 Vide / épuisé</button>
+      <button class="filter-btn" data-group="energy" data-val="moyen">😐 Moyen / fatigué</button>
+      <button class="filter-btn" data-group="energy" data-val="ok">😊 OK / reposé</button>
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <div class="filter-row">
+      <div class="filter-label">Temps disponible</div>
+      <button class="reset-btn" id="reset-btn">Tout effacer</button>
+    </div>
+    <div class="filter-buttons" id="time-group">
+      <button class="filter-btn" data-group="time" data-val="court">⏱ 15–30 min</button>
+      <button class="filter-btn" data-group="time" data-val="moyen">🕐 30–60 min</button>
+      <button class="filter-btn" data-group="time" data-val="long">🕑 1h30+</button>
+    </div>
+  </div>
+
+  <div class="result-zone" id="result-zone">
+    <div class="result-empty">Sélectionne ton énergie et ton temps disponible<br>pour voir les loisirs adaptés.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="legende-title">Les 5 loisirs</div>
+  <div class="legende-grid">
+    <div class="legende-item"><span class="legende-dot" style="background:#2a6b65"></span><span class="legende-name">Comics / BD</span><div class="legende-sub">Visuel · court · toujours dispo</div></div>
+    <div class="legende-item"><span class="legende-dot" style="background:#c47d2a"></span><span class="legende-name">Manga</span><div class="legende-sub">Chapitres · ultra flexible</div></div>
+    <div class="legende-item"><span class="legende-dot" style="background:#3a4f6a"></span><span class="legende-name">Anime</span><div class="legende-sub">Épisode 20 min · énergie min.</div></div>
+    <div class="legende-item"><span class="legende-dot" style="background:#8a3a4a"></span><span class="legende-name">Jeux vidéo</span><div class="legende-sub">Mina (court) · Ys X (long)</div></div>
+    <div class="legende-item"><span class="legende-dot" style="background:#3a6b40"></span><span class="legende-name">Dossiers Criminels</span><div class="legende-sub">Énergie requise · 1h30+ min.</div></div>
+  </div>
+
+  <div class="regle-or">
+    <div class="regle-or-title">La règle d'or</div>
+    <div class="regle-or-text">
+      Si tu dois <strong>réfléchir à ce que tu veux faire</strong>, tu es déjà trop fatigué pour les jeux vidéo ou les Dossiers Criminels.<br>
+      Prends la <strong>BD ou le manga</strong> — pose, reprends, sans culpabilité.<br>
+      Le gaming se mérite : <strong>créneau sanctuarisé, 1h30 minimum, mode avion.</strong>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var state = { energy: null, time: null };
+
+var loisirs = [
+  {
+    id: 'comics', name: 'Comics / BD', icon: '📖', cls: 'card-comics',
+    energie: ['vide','moyen','ok'], temps: ['court','moyen','long'],
+    tag: 'Toujours disponible',
+    why: {
+      vide: 'Lecture visuelle légère, <strong>zéro charge cognitive</strong>. Tu poses à n\'importe quelle page et reprends sans perdre le fil.',
+      moyen: 'Un album se lit en 20–40 min. <strong>Récit complet, satisfaction immédiate.</strong> Idéal pour une coupure.',
+      ok: 'Parfait pour explorer une <strong>série longue ou un arc ambitieux</strong> sans pression de temps.',
+      court: 'Quelques pages suffisent. <strong>Aucun engagement.</strong> Tu reprends où tu en étais.',
+      long: 'Enchaîne plusieurs tomes. <strong>Immersion totale</strong> dans un univers visuel.'
+    }
+  },
+  {
+    id: 'manga', name: 'Manga', icon: '📚', cls: 'card-manga',
+    energie: ['vide','moyen','ok'], temps: ['court','moyen','long'],
+    tag: 'Ultra flexible',
+    why: {
+      vide: 'Un chapitre = <strong>5–10 min</strong>. Narration visuelle instinctive, aucune charge mentale.',
+      moyen: 'Quelques chapitres pour suivre un arc. <strong>Rythme idéal</strong> quand tu as un peu d\'énergie.',
+      ok: 'Idéal pour <strong>s\'immerger dans un univers long</strong> — shonen, seinen, slice of life.',
+      court: 'Un ou deux chapitres. <strong>Pas de frustration</strong> à l\'arrêt — le découpage est fait pour ça.',
+      long: 'Un volume entier d\'une traite. <strong>Plaisir maximum.</strong>'
+    }
+  },
+  {
+    id: 'anime', name: 'Anime', icon: '🎌', cls: 'card-anime',
+    energie: ['moyen','ok'], temps: ['moyen','long'],
+    tag: 'Épisode = unité',
+    why: {
+      moyen: 'Un épisode = <strong>20–25 min</strong>. Unité narrative complète. Facile à interrompre proprement.',
+      ok: 'Plusieurs épisodes d\'affilée pour <strong>vraiment entrer dans l\'histoire</strong>.',
+      long: 'Lance un arc entier. <strong>Immersion narrative profonde.</strong>'
+    }
+  },
+  {
+    id: 'jv', name: 'Jeux vidéo', icon: '🎮', cls: 'card-jv',
+    energie: ['moyen','ok'], temps: ['moyen','long'],
+    tag: 'Deux vitesses',
+    why: {
+      moyen: '<strong>Mina the Hollower</strong> : sessions courtes bien découpées, sauvegarde propre à tout moment.',
+      ok: '<strong>Ys X Proud Nordics</strong> : réserve ce créneau pour une vraie immersion.',
+      long: 'Ton <strong>créneau sanctuarisé</strong> — 1h30 min, mode avion, immersion totale.'
+    }
+  },
+  {
+    id: 'enquete', name: 'Dossiers Criminels', icon: '🔍', cls: 'card-enquete',
+    energie: ['ok'], temps: ['long'],
+    tag: 'Concentration max',
+    why: {
+      ok: 'Demande de la <strong>concentration et une vraie disponibilité mentale</strong>. À réserver quand tu es vraiment reposé.',
+      long: '<strong>1h30 minimum</strong> pour entrer dans le dossier sans lâcher en plein milieu.'
+    }
+  }
+];
+
+function getWhy(l) {
+  var t = state.time;
+  var e = state.energy;
+  if (t && l.why[t]) return l.why[t];
+  if (e && l.why[e]) return l.why[e];
+  return l.why[Object.keys(l.why)[0]];
+}
+
+function render() {
+  var zone = document.getElementById('result-zone');
+  if (!state.energy && !state.time) {
+    zone.innerHTML = '<div class="result-empty">Sélectionne ton énergie et ton temps disponible<br>pour voir les loisirs adaptés.</div>';
+    return;
+  }
+  var matches = loisirs.filter(function(l) {
+    var eOk = !state.energy || l.energie.indexOf(state.energy) !== -1;
+    var tOk = !state.time || l.temps.indexOf(state.time) !== -1;
+    return eOk && tOk;
+  });
+  if (!matches.length) {
+    zone.innerHTML = '<div class="result-empty">Aucun loisir ne correspond à cette combinaison.<br>Essaie d\'ajuster les filtres.</div>';
+    return;
+  }
+  var html = '<div class="result-title">' + matches.length + ' loisir' + (matches.length > 1 ? 's' : '') + ' adapté' + (matches.length > 1 ? 's' : '') + ' en ce moment</div><div class="loisir-cards">';
+  for (var i = 0; i < matches.length; i++) {
+    var l = matches[i];
+    html += '<div class="loisir-card ' + l.cls + '">';
+    html += '<div class="loisir-icon">' + l.icon + '</div>';
+    html += '<div>';
+    html += '<div class="loisir-top"><div class="loisir-name">' + l.name + '</div><span class="loisir-tag">' + l.tag + '</span></div>';
+    html += '<div class="loisir-why">' + getWhy(l) + '</div>';
+    html += '</div></div>';
+  }
+  html += '</div>';
+  zone.innerHTML = html;
+}
+
+var buttons = document.querySelectorAll('.filter-btn');
+for (var i = 0; i < buttons.length; i++) {
+  buttons[i].addEventListener('click', function() {
+    var group = this.getAttribute('data-group');
+    var val = this.getAttribute('data-val');
+    var isActive = this.classList.contains('active');
+    var groupBtns = document.querySelectorAll('[data-group="' + group + '"]');
+    for (var j = 0; j < groupBtns.length; j++) {
+      groupBtns[j].classList.remove('active');
+    }
+    if (!isActive) {
+      this.classList.add('active');
+      state[group] = val;
+    } else {
+      state[group] = null;
+    }
+    render();
+  });
+}
+
+document.getElementById('reset-btn').addEventListener('click', function() {
+  state.energy = null;
+  state.time = null;
+  var allBtns = document.querySelectorAll('.filter-btn');
+  for (var i = 0; i < allBtns.length; i++) {
+    allBtns[i].classList.remove('active');
+  }
+  render();
+});
+</script>
+</body>
+</html>
