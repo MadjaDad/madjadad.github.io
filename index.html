@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Hub — Benjamin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --surface: #ffffff;
+    --border: #e0d8cc;
+    --text: #1a1714;
+    --muted: #8a8279;
+    --ink: #2c2420;
+    --teal: #2a6b65;
+    --teal-bg: #e8f4f2;
+    --amber: #c47d2a;
+    --amber-bg: #fdf3e3;
+    --rose: #8a3a4a;
+    --rose-bg: #fdf0f2;
+    --slate: #3a4f6a;
+    --slate-bg: #edf1f7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 52px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 9vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  h1 em { font-style: italic; color: var(--teal); }
+
+  .header-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 400px;
+  }
+
+  /* DATE */
+  .date-line {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--border);
+    margin-top: 20px;
+  }
+
+  /* CARDS */
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: fadeUp 0.7s 0.15s ease both;
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: 64px 1fr 32px;
+    align-items: center;
+    gap: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    border-left-width: 3px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .card:hover { transform: translateX(4px); border-color: var(--border); }
+  .card:active { transform: translateX(2px) scale(0.99); }
+
+  .card-routine { border-left-color: var(--teal); }
+  .card-routine:hover { box-shadow: -4px 0 0 var(--teal); }
+
+  .card-orga { border-left-color: var(--amber); }
+  .card-orga:hover { box-shadow: -4px 0 0 var(--amber); }
+
+  .card-loisirs { border-left-color: var(--rose); }
+  .card-loisirs:hover { box-shadow: -4px 0 0 var(--rose); }
+
+  .card-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+
+  .card-routine .card-icon { background: var(--teal-bg); }
+  .card-orga .card-icon { background: var(--amber-bg); }
+  .card-loisirs .card-icon { background: var(--rose-bg); }
+
+  .card-body { min-width: 0; }
+
+  .card-phase {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .card-routine .card-phase { color: var(--teal); }
+  .card-orga .card-phase { color: var(--amber); }
+  .card-loisirs .card-phase { color: var(--rose); }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-arrow {
+    font-size: 18px;
+    color: var(--border);
+    flex-shrink: 0;
+    transition: transform 0.15s, color 0.15s;
+  }
+
+  .card:hover .card-arrow {
+    transform: translateX(3px);
+    color: var(--muted);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 44px 0;
+  }
+
+  /* MANTRA */
+  .mantra {
+    animation: fadeUp 0.7s 0.3s ease both;
+    text-align: center;
+  }
+
+  .mantra-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 4vw, 26px);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 440px;
+    margin: 0 auto 14px;
+  }
+
+  .mantra-sub {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--border);
+  }
+
+  /* PHASE BADGE */
+  .phase-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--teal-bg);
+    border: 1px solid rgba(42,107,101,0.2);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 28px;
+  }
+
+  .phase-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .card { grid-template-columns: 50px 1fr 24px; gap: 14px; padding: 18px; }
+    .card-icon { width: 48px; height: 48px; font-size: 22px; border-radius: 12px; }
+    .card-title { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="eyebrow">Mon espace personnel</div>
+    <h1>Mon <em>Hub</em><br>de Vie</h1>
+    <p class="header-desc">Trois guides construits pour ta situation. Consulte-les quand tu en as besoin.</p>
+    <div class="date-line" id="date-line"></div>
+  </div>
+
+  <div style="animation: fadeUp 0.7s 0.05s ease both;">
+    <div class="phase-badge">
+      <div class="phase-dot"></div>
+      Phase 1 en cours — 4 semaines
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <a href="routine-phase1.html" class="card card-routine">
+      <div class="card-icon">🌙</div>
+      <div class="card-body">
+        <div class="card-phase">Sommeil · Énergie</div>
+        <div class="card-title">Routine Soir & Matin</div>
+        <div class="card-desc">21h45 au lit · Rituel matin · Thé · Enfants</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="organisation-journees.html" class="card card-orga">
+      <div class="card-icon">📋</div>
+      <div class="card-body">
+        <div class="card-phase">Journées · Coupures</div>
+        <div class="card-title">Organisation des Journées</div>
+        <div class="card-desc">Menu de coupure · Télétravail · Week-end</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="boussole-loisirs.html" class="card card-loisirs">
+      <div class="card-icon">🎮</div>
+      <div class="card-body">
+        <div class="card-phase">Loisirs · Recharge</div>
+        <div class="card-title">Boussole Loisirs</div>
+        <div class="card-desc">BD · Manga · Anime · Jeux · Enquêtes</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="mantra">
+    <div class="mantra-quote">"Je ne me réinvente pas en un jour.<br>Je construis une brique par soir."</div>
+    <div class="mantra-sub">Phase 1 · Commencé ce soir</div>
+  </div>
+
+</div>
+
+<script>
+  var days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  var months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var now = new Date();
+  var str = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+  document.getElementById('date-line').textContent = str;
+</script>
+</body>
+</html>
